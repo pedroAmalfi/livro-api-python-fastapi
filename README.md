@@ -211,6 +211,6 @@ Esperamos que este livro contribua para sua evolução como desenvolvedor e que,
 
 **Vamos começar?**
 
-➡️ **Capítulo 00 — Preparando o Ambiente de Desenvolvimento**
+[➡️ **Capítulo 00 — Preparando o Ambiente de Desenvolvimento**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/00-preparando-o-ambiente)
 
 </div>
