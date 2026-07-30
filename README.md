@@ -191,7 +191,7 @@ Nosso compromisso é manter este material atualizado e alinhado às boas prátic
 
 Sugestões, correções e melhorias são sempre bem-vindas.
 
-Caso encontre algum erro ou tenha alguma sugestão para tornar este livro ainda melhor, fique à vontade para abrir uma *Issue* ou enviar um *Pull Request*.
+Caso encontre algum erro ou tenha alguma sugestão para tornar este livro ainda melhor, fique à vontade para me enviar um e-mail (pedro.costa@cps.sp.gov.br).
 
 Toda contribuição será muito bem-vinda.
 
