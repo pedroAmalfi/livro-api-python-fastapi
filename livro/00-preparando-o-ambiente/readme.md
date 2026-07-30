@@ -143,8 +143,6 @@ Na próxima seção iniciaremos a instalação das ferramentas que serão utiliz
 
 ---
 
-> **Continue para a Seção 2 — Instalando as Ferramentas.**
-
 <!--
 ===============================================================================
 CAPÍTULO 00 — PREPARANDO O AMBIENTE DE DESENVOLVIMENTO
@@ -338,8 +336,6 @@ Na próxima seção instalaremos a tecnologia que executará nossa aplicação: 
 Também criaremos nosso primeiro Ambiente Virtual, que será utilizado durante todo o desenvolvimento do projeto.
 
 ---
-
-> **Continue para a Seção 3 — Instalando o Python e preparando o Ambiente Virtual.**
 
 <!--
 ===============================================================================
@@ -605,8 +601,6 @@ Na próxima seção instalaremos as primeiras bibliotecas utilizadas no livro, c
 Ao final deste capítulo seu computador estará completamente preparado para acompanhar todos os próximos capítulos.
 
 ---
-
-> **Continue para a Seção 4 — Criando o primeiro projeto com FastAPI.**
 
 <!--
 ===============================================================================
