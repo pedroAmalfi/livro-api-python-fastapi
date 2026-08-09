@@ -279,4 +279,6 @@ Ao concluir este capítulo você preparou completamente seu ambiente de desenvol
 
 # 14. Próximo capítulo
 
-No próximo capítulo conheceremos o Git e entenderemos como controlar a evolução de um projeto profissional desde o primeiro commit.
+No próximo capítulo vamos criar a aplicação e realizar o cadastro dos alunos junto com o banco de dados.
+
+[➡️ **Capítulo 01 — Cadastro de Aluno**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/01-cadastro-de-aluno)
