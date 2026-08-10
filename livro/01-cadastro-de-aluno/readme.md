@@ -1336,3 +1336,1366 @@ O backend já possui as seguintes funcionalidades:
 
 O próximo passo será desenvolver o **frontend**, criando o formulário HTML e o código JavaScript responsável por consumir a API FastAPI.
 
+
+
+## 11. `frontend/index.html`
+
+O arquivo `index.html` será a página inicial do sistema.
+
+Nesta primeira versão, ele contém o formulário de cadastro de alunos.
+
+### Código inicial
+
+```html
+<h1>Cadastro de Alunos</h1>
+
+<form id="form-aluno">
+    <div>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+    </div>
+
+    <div>
+        <label for="cpf">CPF:</label>
+        <input type="text" id="cpf" name="cpf" required>
+    </div>
+
+    <div>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+
+    <div>
+        <label for="data_nascimento">Data de nascimento:</label>
+        <input type="date" id="data_nascimento" name="data_nascimento" required>
+    </div>
+
+    <div>
+        <label for="curso">Curso:</label>
+        <input type="text" id="curso" name="curso" required>
+    </div>
+
+    <button type="submit">Cadastrar</button>
+</form>
+
+<div id="mensagem" aria-live="polite"></div>
+
+<script src="/frontend/js/app.js"></script>
+```
+
+### Estrutura do formulário
+
+O formulário utiliza:
+
+```html
+<form id="form-aluno">
+```
+
+O atributo `id` permite que o JavaScript encontre o formulário e acompanhe o evento de envio.
+
+Cada campo possui um `label` associado ao seu respectivo `input`.
+
+Por exemplo:
+
+```html
+<label for="nome">Nome:</label>
+<input type="text" id="nome" name="nome" required>
+```
+
+O atributo `for="nome"` do `label` corresponde ao:
+
+```html
+id="nome"
+```
+
+do campo.
+
+O atributo:
+
+```html
+required
+```
+
+faz com que o navegador exija o preenchimento do campo antes do envio do formulário.
+
+---
+
+## 11.1 Campo de e-mail
+
+O campo de e-mail utiliza:
+
+```html
+<input type="email" id="email" name="email" required>
+```
+
+O tipo:
+
+```html
+type="email"
+```
+
+permite que o próprio navegador faça uma validação inicial do formato do e-mail.
+
+Além dessa validação no frontend, o backend também possui:
+
+```python
+email: EmailStr
+```
+
+Portanto, existem duas camadas de validação:
+
+```text
+Navegador
+   ↓
+type="email"
+   ↓
+FastAPI / Pydantic
+   ↓
+EmailStr
+   ↓
+Banco de Dados
+```
+
+---
+
+## 11.2 Elemento de mensagem
+
+O elemento:
+
+```html
+<div id="mensagem" aria-live="polite"></div>
+```
+
+será utilizado pelo JavaScript para apresentar mensagens ao usuário.
+
+Por exemplo:
+
+```text
+Aluno cadastrado com sucesso!
+```
+
+ou:
+
+```text
+Erro ao cadastrar aluno: CPF já cadastrado.
+```
+
+O atributo:
+
+```html
+aria-live="polite"
+```
+
+ajuda tecnologias assistivas, como leitores de tela, a identificar que o conteúdo desse elemento pode ser atualizado dinamicamente.
+
+---
+
+# 12. `frontend/js/app.js`
+
+O arquivo `app.js` será responsável pela comunicação entre o frontend e a API FastAPI.
+
+### Código
+
+```javascript
+const formulario = document.getElementById("form-aluno");
+const mensagem = document.getElementById("mensagem");
+
+formulario.addEventListener("submit", async function(evento) {
+    evento.preventDefault();
+
+    mensagem.textContent = "";
+
+    const aluno = {
+        nome: document.getElementById("nome").value,
+        cpf: document.getElementById("cpf").value,
+        email: document.getElementById("email").value,
+        data_nascimento: document.getElementById("data_nascimento").value,
+        curso: document.getElementById("curso").value
+    };
+
+    try {
+        const resposta = await fetch("/alunos", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(aluno)
+        });
+
+        const resultado = await resposta.json();
+
+        if (resposta.ok) {
+            mensagem.textContent = "Aluno cadastrado com sucesso!";
+            formulario.reset();
+            console.log("Aluno cadastrado:", resultado);
+        } else {
+            mensagem.textContent =
+                "Erro ao cadastrar aluno: " + obterMensagemErro(resultado);
+
+            console.error("Erro da API:", resultado);
+        }
+
+    } catch (erro) {
+        mensagem.textContent =
+            "Não foi possível conectar ao servidor.";
+
+        console.error("Erro de conexão:", erro);
+    }
+});
+
+
+function obterMensagemErro(resultado) {
+    if (!resultado.detail) {
+        return "Dados inválidos.";
+    }
+
+    if (Array.isArray(resultado.detail)) {
+        return resultado.detail
+            .map(erro => {
+                const campo = erro.loc?.[1];
+
+                if (campo === "email") return "E-mail inválido.";
+                if (campo === "nome") return "Nome inválido.";
+                if (campo === "cpf") return "CPF inválido.";
+                if (campo === "data_nascimento") return "Data de nascimento inválida.";
+                if (campo === "curso") return "Curso inválido.";
+
+                return erro.msg;
+            })
+            .join(" ");
+    }
+
+    return resultado.detail;
+}
+```
+
+---
+
+## 12.1 Interceptando o envio do formulário
+
+O código:
+
+```javascript
+formulario.addEventListener("submit", async function(evento) {
+```
+
+registra um evento para acompanhar o envio do formulário.
+
+Quando o usuário clicar em:
+
+```text
+Cadastrar
+```
+
+essa função será executada.
+
+---
+
+## 12.2 `preventDefault()`
+
+Logo no início temos:
+
+```javascript
+evento.preventDefault();
+```
+
+Normalmente, quando um formulário HTML é enviado, o navegador realiza o comportamento padrão do formulário.
+
+Nesse projeto, queremos impedir esse comportamento porque os dados serão enviados para a API utilizando JavaScript.
+
+Portanto:
+
+```javascript
+preventDefault()
+```
+
+impede o envio automático do formulário e permite que o `fetch()` faça a comunicação com o backend.
+
+---
+
+## 12.3 Coletando os dados
+
+O objeto:
+
+```javascript
+const aluno = {
+    nome: document.getElementById("nome").value,
+    cpf: document.getElementById("cpf").value,
+    email: document.getElementById("email").value,
+    data_nascimento: document.getElementById("data_nascimento").value,
+    curso: document.getElementById("curso").value
+};
+```
+
+coleta os valores preenchidos pelo usuário.
+
+O resultado será semelhante a:
+
+```json
+{
+    "nome": "Maria Silva",
+    "cpf": "123.456.789-00",
+    "email": "maria@email.com",
+    "data_nascimento": "2005-08-15",
+    "curso": "Desenvolvimento de Sistemas"
+}
+```
+
+---
+
+## 12.4 `fetch()`
+
+A comunicação com o backend é realizada por:
+
+```javascript
+const resposta = await fetch("/alunos", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(aluno)
+});
+```
+
+O `fetch()` realiza uma chamada HTTP para a API.
+
+Neste caso:
+
+```text
+POST /alunos
+```
+
+---
+
+## 12.5 `JSON.stringify()`
+
+O objeto JavaScript:
+
+```javascript
+aluno
+```
+
+é convertido para JSON utilizando:
+
+```javascript
+JSON.stringify(aluno)
+```
+
+Isso permite que o objeto seja enviado no corpo da requisição HTTP.
+
+O cabeçalho:
+
+```javascript
+"Content-Type": "application/json"
+```
+
+informa ao servidor que o corpo da requisição está no formato JSON.
+
+---
+
+## 12.6 Verificando a resposta
+
+Depois de enviar os dados:
+
+```javascript
+const resultado = await resposta.json();
+```
+
+converte a resposta da API para um objeto JavaScript.
+
+Em seguida:
+
+```javascript
+if (resposta.ok)
+```
+
+verifica se a requisição foi bem-sucedida.
+
+Quando o cadastro funciona:
+
+```javascript
+mensagem.textContent = "Aluno cadastrado com sucesso!";
+formulario.reset();
+```
+
+uma mensagem é apresentada e o formulário é limpo.
+
+---
+
+## 12.7 Tratando erros
+
+Quando a API retorna um erro:
+
+```javascript
+mensagem.textContent =
+    "Erro ao cadastrar aluno: " + obterMensagemErro(resultado);
+```
+
+a função `obterMensagemErro()` transforma a resposta técnica da API em uma mensagem mais compreensível para o usuário.
+
+Por exemplo, um erro de validação do Pydantic pode conter informações técnicas como:
+
+```json
+{
+    "detail": [
+        {
+            "loc": ["body", "email"],
+            "msg": "value is not a valid email address"
+        }
+    ]
+}
+```
+
+O JavaScript transforma isso em:
+
+```text
+E-mail inválido.
+```
+
+---
+
+## 12.8 Tratamento de falhas de conexão
+
+O bloco:
+
+```javascript
+catch (erro) {
+    mensagem.textContent =
+        "Não foi possível conectar ao servidor.";
+
+    console.error("Erro de conexão:", erro);
+}
+```
+
+é executado quando ocorre uma falha na comunicação com o servidor.
+
+Por exemplo:
+
+- FastAPI não está executando;
+- servidor foi interrompido;
+- endereço da API está incorreto;
+- ocorreu uma falha de rede.
+
+---
+
+# 13. Comandos para Executar o Projeto
+
+Na raiz do projeto, execute:
+
+```cmd
+venv\Scriptsctivate
+```
+
+Depois, teste a conexão com o banco:
+
+```cmd
+python backend/database.py
+```
+
+Se a conexão estiver funcionando, execute a API:
+
+```cmd
+fastapi dev backend/main.py
+```
+
+Também é possível utilizar:
+
+```cmd
+uvicorn backend.main:app --reload
+```
+
+Depois, acesse:
+
+**Aplicação:**
+
+http://127.0.0.1:8000/
+
+**Documentação da API:**
+
+http://127.0.0.1:8000/docs
+
+**Consulta dos alunos pela API:**
+
+http://127.0.0.1:8000/alunos
+
+---
+
+# 14. Fluxo Completo do Cadastro
+
+O fluxo completo do cadastro de um aluno pode ser representado da seguinte maneira:
+
+```text
+Usuário
+   ↓
+HTML
+   ↓
+JavaScript
+   ↓
+fetch()
+   ↓
+POST /alunos
+   ↓
+FastAPI
+   ↓
+Pydantic
+   ↓
+MySQL
+   ↓
+JSON
+   ↓
+JavaScript
+   ↓
+Mensagem na tela
+```
+
+## 14.1 CPF duplicado
+
+Quando o usuário tenta cadastrar um CPF que já existe:
+
+```text
+Usuário
+   ↓
+POST /alunos
+   ↓
+MySQL
+   ↓
+UNIQUE
+   ↓
+IntegrityError 1062
+   ↓
+rollback()
+   ↓
+HTTP 409
+   ↓
+"CPF já cadastrado."
+```
+
+---
+
+## 14.2 E-mail inválido
+
+Quando o usuário envia um e-mail inválido:
+
+```text
+Usuário
+   ↓
+POST /alunos
+   ↓
+Pydantic / EmailStr
+   ↓
+Validação rejeitada
+   ↓
+HTTP 422
+   ↓
+JavaScript
+   ↓
+"E-mail inválido."
+```
+
+---
+
+# 15. Git e GitHub
+
+Depois que o projeto estiver funcionando, ele poderá ser versionado utilizando Git.
+
+Inicialize o repositório:
+
+```cmd
+git init
+```
+
+Adicione os arquivos:
+
+```cmd
+git add .
+```
+
+Crie o primeiro commit:
+
+```cmd
+git commit -m "Versão temporária - cadastro de alunos"
+```
+
+Defina a branch principal:
+
+```cmd
+git branch -M main
+```
+
+Adicione o repositório remoto:
+
+```cmd
+git remote add origin URL_DO_SEU_REPOSITORIO
+```
+
+Envie os arquivos:
+
+```cmd
+git push -u origin main
+```
+
+> Substitua `URL_DO_SEU_REPOSITORIO` pela URL real do repositório criado no GitHub.
+
+---
+
+## 15.1 Arquivo `.gitignore`
+
+Antes de executar:
+
+```cmd
+git add .
+```
+
+crie um arquivo chamado:
+
+```text
+.gitignore
+```
+
+com:
+
+```gitignore
+venv/
+.env
+__pycache__/
+*.pyc
+```
+
+Esse arquivo impede que determinados arquivos e diretórios sejam enviados para o GitHub.
+
+### Por que isso é importante?
+
+O `.gitignore` evita publicar:
+
+- ambiente virtual;
+- credenciais do banco;
+- senhas;
+- variáveis de ambiente;
+- arquivos temporários;
+- arquivos compilados do Python.
+
+Principalmente, o arquivo:
+
+```text
+.env
+```
+
+não deve ser publicado, pois pode conter informações sensíveis.
+
+---
+
+# 16. O que já funciona e o que falta
+
+## Concluído
+
+- [x] Banco de dados `escola`.
+- [x] Tabela `alunos`.
+- [x] Conexão Python → MySQL.
+- [x] `GET /alunos` — operação **Read** disponível na API.
+- [x] `POST /alunos` — operação **Create** funcionando.
+- [x] Formulário HTML.
+- [x] JavaScript + `fetch()`.
+- [x] Mensagens de sucesso e erro.
+- [x] Tratamento de CPF duplicado.
+- [x] Validação de e-mail no backend.
+- [x] Validação dos dados utilizando Pydantic.
+- [x] Documentação automática com FastAPI.
+
+## Pendente
+
+- [ ] Mostrar o `GET /alunos` dentro da interface.
+- [ ] Reformular o visual utilizando CSS.
+- [ ] Implementar **Update**.
+- [ ] Implementar **Delete**.
+- [ ] Criar páginas específicas para alunos, professores e funcionários.
+- [ ] Criar as tabelas de professores e funcionários.
+- [ ] Criar as APIs correspondentes.
+- [ ] Integrar as novas páginas ao menu principal.
+
+---
+
+# 17. Atividade de Evolução do Projeto — Separando as Páginas
+
+Neste ponto, os alunos deverão realizar uma evolução importante no projeto.
+
+Até agora, o sistema possui o cadastro de alunos diretamente na página:
+
+```text
+index.html
+```
+
+Agora, a proposta é transformar o `index.html` em uma **página inicial do sistema**, deixando cada cadastro em uma página própria.
+
+A primeira alteração será criar uma página específica:
+
+```text
+frontend/cadastrodealuno.html
+```
+
+A página inicial deverá possuir um link ou botão para acessar essa tela.
+
+---
+
+## 17.1 Nova estrutura do frontend
+
+A estrutura deverá ficar semelhante a:
+
+```text
+frontend/
+├── index.html
+├── cadastrodealuno.html
+├── cadastrodeprofessor.html
+├── cadastrodefuncionario.html
+└── js/
+    ├── app.js
+    ├── aluno.js
+    ├── professor.js
+    └── funcionario.js
+```
+
+Inicialmente, os alunos deverão criar apenas:
+
+```text
+cadastrodealuno.html
+```
+
+Depois, a atividade continuará com:
+
+```text
+cadastrodeprofessor.html
+cadastrodefuncionario.html
+```
+
+---
+
+# 18. Criando `cadastrodealuno.html`
+
+A página `cadastrodealuno.html` deverá receber o formulário que atualmente está dentro do `index.html`.
+
+Um exemplo inicial:
+
+```html
+<h1>Cadastro de Alunos</h1>
+
+<form id="form-aluno">
+    <div>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+    </div>
+
+    <div>
+        <label for="cpf">CPF:</label>
+        <input type="text" id="cpf" name="cpf" required>
+    </div>
+
+    <div>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+
+    <div>
+        <label for="data_nascimento">Data de nascimento:</label>
+        <input type="date" id="data_nascimento" name="data_nascimento" required>
+    </div>
+
+    <div>
+        <label for="curso">Curso:</label>
+        <input type="text" id="curso" name="curso" required>
+    </div>
+
+    <button type="submit">Cadastrar</button>
+</form>
+
+<div id="mensagem" aria-live="polite"></div>
+
+<a href="/">Voltar para o início</a>
+
+<script src="/frontend/js/aluno.js"></script>
+```
+
+Observe que o JavaScript também foi separado:
+
+```html
+<script src="/frontend/js/aluno.js"></script>
+```
+
+Isso é recomendado porque cada página pode possuir suas próprias regras.
+
+---
+
+# 19. O que deve mudar no `index.html`?
+
+Depois de criar:
+
+```text
+cadastrodealuno.html
+```
+
+o formulário de aluno deve ser removido do `index.html`.
+
+O `index.html` passa a funcionar como uma **página inicial ou menu principal**.
+
+Por exemplo:
+
+```html
+<h1>Sistema Escola</h1>
+
+<h2>Cadastros</h2>
+
+<nav>
+    <a href="/frontend/cadastrodealuno.html">
+        Cadastro de Alunos
+    </a>
+</nav>
+```
+
+O objetivo é deixar a responsabilidade de cada página mais clara:
+
+```text
+index.html
+    ↓
+Página inicial
+
+cadastrodealuno.html
+    ↓
+Cadastro de alunos
+```
+
+---
+
+# 20. O que deve mudar no `main.py`?
+
+Como o FastAPI já possui:
+
+```python
+app.mount(
+    "/frontend",
+    StaticFiles(directory=FRONTEND_DIR),
+    name="frontend"
+)
+```
+
+os arquivos HTML existentes dentro de `frontend` poderão ser acessados pelo navegador.
+
+Por exemplo:
+
+```text
+/frontend/cadastrodealuno.html
+```
+
+Porém, para tornar as URLs mais amigáveis, os alunos poderão criar uma rota específica:
+
+```python
+@app.get("/cadastro-de-aluno", include_in_schema=False)
+def pagina_cadastro_aluno():
+    return FileResponse(FRONTEND_DIR / "cadastrodealuno.html")
+```
+
+Assim, o endereço:
+
+```text
+http://127.0.0.1:8000/cadastro-de-aluno
+```
+
+abrirá:
+
+```text
+frontend/cadastrodealuno.html
+```
+
+Essa abordagem também será útil posteriormente para professores e funcionários.
+
+---
+
+# 21. O que deve mudar no JavaScript?
+
+O JavaScript que atualmente está em:
+
+```text
+frontend/js/app.js
+```
+
+está relacionado ao formulário de alunos.
+
+Ao separar as páginas, recomenda-se criar:
+
+```text
+frontend/js/aluno.js
+```
+
+e mover para ele o código responsável pelo cadastro de alunos.
+
+Assim:
+
+```text
+frontend/
+└── js/
+    ├── app.js
+    └── aluno.js
+```
+
+O `app.js` poderá futuramente ficar responsável por comportamentos gerais do sistema, enquanto `aluno.js` ficará responsável pelo cadastro de alunos.
+
+### Exemplo
+
+```javascript
+const formulario = document.getElementById("form-aluno");
+const mensagem = document.getElementById("mensagem");
+
+formulario.addEventListener("submit", async function(evento) {
+    evento.preventDefault();
+
+    const aluno = {
+        nome: document.getElementById("nome").value,
+        cpf: document.getElementById("cpf").value,
+        email: document.getElementById("email").value,
+        data_nascimento: document.getElementById("data_nascimento").value,
+        curso: document.getElementById("curso").value
+    };
+
+    // Comunicação com a API...
+});
+```
+
+---
+
+# 22. Evolução para Professores e Funcionários
+
+Depois que o cadastro de alunos estiver separado, os alunos deverão ampliar o sistema.
+
+A página inicial deverá apresentar três opções:
+
+```text
+┌─────────────────────────────┐
+│       SISTEMA ESCOLA        │
+├─────────────────────────────┤
+│                             │
+│  [ Cadastro de Aluno ]      │
+│                             │
+│  [ Cadastro de Professor ]  │
+│                             │
+│  [ Cadastro de Funcionário ]│
+│                             │
+└─────────────────────────────┘
+```
+
+Cada botão deverá direcionar para uma página específica:
+
+```text
+Cadastro de Aluno
+        ↓
+cadastrodealuno.html
+
+Cadastro de Professor
+        ↓
+cadastrodeprofessor.html
+
+Cadastro de Funcionário
+        ↓
+cadastrodefuncionario.html
+```
+
+---
+
+# 23. Criando o Cadastro de Professores
+
+Os alunos deverão criar:
+
+```text
+frontend/cadastrodeprofessor.html
+```
+
+e o JavaScript:
+
+```text
+frontend/js/professor.js
+```
+
+Porém, não basta criar somente a página.
+
+Será necessário criar também a estrutura correspondente no backend e no banco de dados.
+
+---
+
+## 23.1 Nova tabela `professores`
+
+Uma possibilidade inicial é:
+
+```sql
+CREATE TABLE professores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14) NOT NULL UNIQUE,
+    email VARCHAR(150) NOT NULL,
+    especialidade VARCHAR(100) NOT NULL
+);
+```
+
+---
+
+## 23.2 Novo schema
+
+No `schemas.py`, deverá ser criado um modelo para receber os dados:
+
+```python
+class ProfessorCreate(BaseModel):
+    nome: str
+    cpf: str
+    email: EmailStr
+    especialidade: str
+```
+
+E outro para representar a resposta:
+
+```python
+class ProfessorResponse(BaseModel):
+    id: int
+    nome: str
+    cpf: str
+    email: EmailStr
+    especialidade: str
+```
+
+---
+
+## 23.3 Novas rotas no `main.py`
+
+Será necessário criar uma rota para consultar professores:
+
+```python
+@app.get("/professores", response_model=list[ProfessorResponse])
+def listar_professores():
+    ...
+```
+
+E uma rota para cadastrar professores:
+
+```python
+@app.post("/professores", response_model=ProfessorResponse)
+def cadastrar_professor(professor: ProfessorCreate):
+    ...
+```
+
+A lógica deverá seguir o mesmo princípio utilizado no cadastro de alunos:
+
+```text
+HTML
+   ↓
+JavaScript
+   ↓
+POST /professores
+   ↓
+Pydantic
+   ↓
+MySQL
+   ↓
+ProfessorResponse
+   ↓
+Frontend
+```
+
+---
+
+# 24. Criando o Cadastro de Funcionários
+
+Depois do cadastro de professores, deverá ser criada:
+
+```text
+frontend/cadastrodefuncionario.html
+```
+
+e:
+
+```text
+frontend/js/funcionario.js
+```
+
+Também será necessário criar a tabela correspondente no MySQL.
+
+Uma possibilidade inicial:
+
+```sql
+CREATE TABLE funcionarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14) NOT NULL UNIQUE,
+    email VARCHAR(150) NOT NULL,
+    cargo VARCHAR(100) NOT NULL,
+    setor VARCHAR(100) NOT NULL
+);
+```
+
+---
+
+## 24.1 Schemas de funcionários
+
+No `schemas.py`:
+
+```python
+class FuncionarioCreate(BaseModel):
+    nome: str
+    cpf: str
+    email: EmailStr
+    cargo: str
+    setor: str
+```
+
+E:
+
+```python
+class FuncionarioResponse(BaseModel):
+    id: int
+    nome: str
+    cpf: str
+    email: EmailStr
+    cargo: str
+    setor: str
+```
+
+---
+
+## 24.2 Novas rotas
+
+No `main.py`:
+
+```python
+@app.get("/funcionarios", response_model=list[FuncionarioResponse])
+def listar_funcionarios():
+    ...
+```
+
+e:
+
+```python
+@app.post("/funcionarios", response_model=FuncionarioResponse)
+def cadastrar_funcionario(funcionario: FuncionarioCreate):
+    ...
+```
+
+---
+
+# 25. Nova Estrutura Geral do Projeto
+
+Ao final dessa etapa, a estrutura poderá ficar assim:
+
+```text
+cadastro-alunos/
+├── backend/
+│   ├── main.py
+│   ├── database.py
+│   └── schemas.py
+│
+├── frontend/
+│   ├── index.html
+│   ├── cadastrodealuno.html
+│   ├── cadastrodeprofessor.html
+│   ├── cadastrodefuncionario.html
+│   │
+│   └── js/
+│       ├── app.js
+│       ├── aluno.js
+│       ├── professor.js
+│       └── funcionario.js
+│
+├── venv/
+├── .env
+└── .gitignore
+```
+
+---
+
+# 26. Fluxo da Nova Aplicação
+
+Depois da evolução, o funcionamento será:
+
+```text
+                         ┌─────────────────────┐
+                         │     index.html      │
+                         │   Página inicial    │
+                         └──────────┬──────────┘
+                                    │
+                    ┌───────────────┼───────────────┐
+                    │               │               │
+                    ▼               ▼               ▼
+          ┌────────────────┐ ┌────────────────┐ ┌──────────────────┐
+          │ cadastro de    │ │ cadastro de    │ │ cadastro de      │
+          │ aluno          │ │ professor      │ │ funcionário      │
+          └───────┬────────┘ └───────┬────────┘ └────────┬─────────┘
+                  │                  │                   │
+                  ▼                  ▼                   ▼
+             aluno.js         professor.js       funcionario.js
+                  │                  │                   │
+                  ▼                  ▼                   ▼
+              /alunos          /professores       /funcionarios
+                  │                  │                   │
+                  ▼                  ▼                   ▼
+               MySQL              MySQL               MySQL
+```
+
+---
+
+# 27. Desafio Proposto aos Alunos
+
+A partir desta etapa, o exercício será evoluir o projeto existente.
+
+### Etapa 1 — Separar o cadastro de alunos
+
+Criar:
+
+```text
+frontend/cadastrodealuno.html
+```
+
+Mover o formulário de alunos para essa página.
+
+Alterar o `index.html` para funcionar como página inicial.
+
+Criar ou adaptar:
+
+```text
+frontend/js/aluno.js
+```
+
+para continuar realizando o cadastro através de:
+
+```text
+POST /alunos
+```
+
+---
+
+### Etapa 2 — Criar o cadastro de professores
+
+Criar:
+
+```text
+frontend/cadastrodeprofessor.html
+frontend/js/professor.js
+```
+
+Criar a tabela:
+
+```text
+professores
+```
+
+Criar os schemas:
+
+```text
+ProfessorCreate
+ProfessorResponse
+```
+
+Criar as rotas:
+
+```text
+GET /professores
+POST /professores
+```
+
+---
+
+### Etapa 3 — Criar o cadastro de funcionários
+
+Criar:
+
+```text
+frontend/cadastrodefuncionario.html
+frontend/js/funcionario.js
+```
+
+Criar a tabela:
+
+```text
+funcionarios
+```
+
+Criar os schemas:
+
+```text
+FuncionarioCreate
+FuncionarioResponse
+```
+
+Criar as rotas:
+
+```text
+GET /funcionarios
+POST /funcionarios
+```
+
+---
+
+### Etapa 4 — Atualizar a página inicial
+
+O `index.html` deverá apresentar opções para:
+
+- Cadastro de Alunos;
+- Cadastro de Professores;
+- Cadastro de Funcionários.
+
+Cada opção deverá direcionar para sua respectiva página.
+
+---
+
+### Etapa 5 — Testar toda a aplicação
+
+Os alunos deverão testar:
+
+1. Abrir a página inicial.
+2. Acessar o cadastro de alunos.
+3. Cadastrar um aluno.
+4. Acessar o cadastro de professores.
+5. Cadastrar um professor.
+6. Acessar o cadastro de funcionários.
+7. Cadastrar um funcionário.
+8. Testar CPF duplicado.
+9. Testar e-mail inválido.
+10. Conferir os registros diretamente no MySQL.
+11. Conferir as rotas pela documentação `/docs`.
+12. Verificar o código no GitHub.
+
+---
+
+# 28. O que muda em cada camada?
+
+A principal finalidade dessa atividade é fazer com que os alunos percebam que uma alteração no frontend pode exigir alterações em várias partes da aplicação.
+
+| Camada | Alunos | Professores | Funcionários |
+|---|---|---|---|
+| HTML | `cadastrodealuno.html` | `cadastrodeprofessor.html` | `cadastrodefuncionario.html` |
+| JavaScript | `aluno.js` | `professor.js` | `funcionario.js` |
+| Schema | `AlunoCreate` / `AlunoResponse` | `ProfessorCreate` / `ProfessorResponse` | `FuncionarioCreate` / `FuncionarioResponse` |
+| API | `/alunos` | `/professores` | `/funcionarios` |
+| Banco | `alunos` | `professores` | `funcionarios` |
+
+Esse exercício demonstra, na prática, a integração entre:
+
+```text
+Frontend
+    ↓
+JavaScript
+    ↓
+API REST
+    ↓
+Pydantic
+    ↓
+Banco de Dados
+```
+
+---
+
+# 29. Próxima Versão
+
+A próxima etapa será integrar o `GET /alunos` ao frontend e mostrar os registros em uma tabela.
+
+Depois, a interface será reformulada visualmente para ficar mais profissional.
+
+Em seguida, serão implementadas as operações:
+
+- **Update** — atualização de registros;
+- **Delete** — exclusão de registros.
+
+Posteriormente, o projeto poderá evoluir para um pequeno **Sistema de Gestão Escolar**, com diferentes módulos e relacionamentos entre as entidades.
+
+A documentação apresentada neste capítulo é temporária. Quando a aplicação estiver mais madura, o conteúdo deverá ser revisado, reorganizado e transformado em uma versão definitiva do capítulo do livro.
