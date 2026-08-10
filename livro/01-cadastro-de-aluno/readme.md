@@ -639,8 +639,8 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from mysql.connector import IntegrityError
 
-from database import criar_conexao
-from schemas import AlunoCreate, AlunoResponse
+from backend.database import criar_conexao
+from backend.schemas import AlunoCreate, AlunoResponse
 
 
 app = FastAPI()
@@ -1783,7 +1783,7 @@ Por exemplo:
 Na raiz do projeto, execute:
 
 ```cmd
-venv\Scriptsctivate
+venv\Scripts\ctivate
 ```
 
 Depois, teste a conexão com o banco:
