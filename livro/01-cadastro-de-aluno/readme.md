@@ -298,7 +298,7 @@ A aplicação permitirá realizar as principais operações de um **CRUD de alun
 
 A comunicação entre o frontend e o backend será realizada por meio de uma **API REST desenvolvida com FastAPI**.
 
-## 8. `backend/database.py`
+## 9. `backend/database.py`
 
 O arquivo `database.py` será responsável por centralizar a conexão da aplicação com o banco de dados MySQL.
 
@@ -447,7 +447,7 @@ Conexões com o banco de dados consomem recursos. Por isso, sempre que uma conex
 
 ---
 
-## 9. `backend/schemas.py`
+## 10. `backend/schemas.py`
 
 O arquivo `schemas.py` será responsável por definir os modelos utilizados para validar os dados recebidos e enviados pela API.
 
@@ -615,7 +615,7 @@ poderá ser convertida para um objeto `date` no Python.
 
 ---
 
-## 10. `backend/main.py`
+## 11. `backend/main.py`
 
 O arquivo `main.py` é o **núcleo da API**.
 
@@ -739,7 +739,7 @@ def cadastrar_aluno(aluno: AlunoCreate):
         conexao.close()
 ```
 
-### 10.1 Criando a aplicação FastAPI
+### 11.1 Criando a aplicação FastAPI
 
 ```python
 app = FastAPI()
@@ -749,7 +749,7 @@ Essa linha cria a aplicação FastAPI.
 
 O objeto `app` será utilizado para registrar as rotas da API.
 
-### 10.2 Trabalhando com caminhos de arquivos
+### 11.2 Trabalhando com caminhos de arquivos
 
 ```python
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -802,7 +802,7 @@ apontará para:
 cadastro-alunos/frontend/
 ```
 
-### 10.3 Disponibilizando arquivos estáticos
+### 11.3 Disponibilizando arquivos estáticos
 
 ```python
 app.mount(
@@ -820,7 +820,7 @@ O `StaticFiles` permite que o FastAPI disponibilize arquivos estáticos do front
 - imagens;
 - outros arquivos estáticos.
 
-### 10.4 Rota inicial `/`
+### 11.4 Rota inicial `/`
 
 ```python
 @app.get("/", include_in_schema=False)
@@ -852,7 +852,7 @@ faz com que essa rota não seja exibida na documentação automática da API.
 
 ---
 
-## 10.5 Rota `GET /alunos`
+## 11.5 Rota `GET /alunos`
 
 A rota:
 
@@ -937,7 +937,7 @@ O resultado será semelhante a:
 
 ---
 
-## 10.6 Rota `POST /alunos`
+## 11.6 Rota `POST /alunos`
 
 A rota:
 
@@ -1035,7 +1035,7 @@ Esse valor será utilizado na resposta da API.
 
 ---
 
-## 10.7 Tratamento de erros com `try`, `except` e `finally`
+## 11.7 Tratamento de erros com `try`, `except` e `finally`
 
 O cadastro utiliza:
 
@@ -1056,7 +1056,7 @@ finally:
 
 ---
 
-## 10.8 Erro de CPF duplicado
+## 11.8 Erro de CPF duplicado
 
 A tabela possui:
 
@@ -1095,7 +1095,7 @@ indica que a requisição não pode ser concluída devido a um conflito com o es
 
 ---
 
-## 10.9 `rollback()`
+## 11.9 `rollback()`
 
 Quando ocorre um erro durante uma transação, utilizamos:
 
@@ -1109,7 +1109,7 @@ Isso ajuda a manter a consistência dos dados.
 
 ---
 
-## 10.10 Outros erros de integridade
+## 11.10 Outros erros de integridade
 
 Caso ocorra outro erro de integridade diferente do CPF duplicado, a aplicação retorna:
 
@@ -1130,7 +1130,7 @@ indica que ocorreu um erro no processamento do servidor.
 
 ---
 
-## 10.11 Fechando os recursos
+## 11.11 Fechando os recursos
 
 Independentemente de ocorrer erro ou não, o bloco `finally` será executado:
 
@@ -1156,7 +1156,7 @@ Isso evita deixar recursos abertos desnecessariamente.
 
 ---
 
-# 11. Resumo do funcionamento do Backend
+# 12. Resumo do funcionamento do Backend
 
 Até este ponto, o projeto possui três arquivos principais:
 
@@ -1175,7 +1175,7 @@ backend/
 
 ---
 
-## 11.1 Fluxo do cadastro
+## 12.1 Fluxo do cadastro
 
 ```text
 ┌─────────────────────┐
@@ -1220,7 +1220,7 @@ backend/
 
 ---
 
-## 11.2 Fluxo da consulta
+## 12.2 Fluxo da consulta
 
 ```text
 Frontend
@@ -1244,7 +1244,7 @@ Frontend
 
 ---
 
-# 12. Executando a API
+# 13. Executando a API
 
 Com o ambiente virtual ativado e estando na pasta raiz do projeto, execute:
 
@@ -1274,7 +1274,7 @@ http://127.0.0.1:8000/
 
 ---
 
-## 12.1 Documentação automática do FastAPI
+## 13.1 Documentação automática do FastAPI
 
 O FastAPI gera automaticamente uma documentação interativa da API.
 
@@ -1301,7 +1301,7 @@ Isso facilita bastante o desenvolvimento e os testes antes da criação completa
 
 ---
 
-# 13. Situação Atual do Projeto
+# 14. Situação Atual do Projeto
 
 Até aqui, o projeto possui:
 
@@ -1338,7 +1338,7 @@ O próximo passo será desenvolver o **frontend**, criando o formulário HTML e 
 
 
 
-## 11. `frontend/index.html`
+## 15. `frontend/index.html`
 
 O arquivo `index.html` será a página inicial do sistema.
 
@@ -1420,7 +1420,7 @@ faz com que o navegador exija o preenchimento do campo antes do envio do formul�
 
 ---
 
-## 11.1 Campo de e-mail
+## 15.1 Campo de e-mail
 
 O campo de e-mail utiliza:
 
@@ -1458,7 +1458,7 @@ Banco de Dados
 
 ---
 
-## 11.2 Elemento de mensagem
+## 15.2 Elemento de mensagem
 
 O elemento:
 
@@ -1490,7 +1490,7 @@ ajuda tecnologias assistivas, como leitores de tela, a identificar que o conteú
 
 ---
 
-# 12. `frontend/js/app.js`
+# 16. `frontend/js/app.js`
 
 O arquivo `app.js` será responsável pela comunicação entre o frontend e a API FastAPI.
 
@@ -1571,7 +1571,7 @@ function obterMensagemErro(resultado) {
 
 ---
 
-## 12.1 Interceptando o envio do formulário
+## 16.1 Interceptando o envio do formulário
 
 O código:
 
@@ -1591,7 +1591,7 @@ essa função será executada.
 
 ---
 
-## 12.2 `preventDefault()`
+## 16.2 `preventDefault()`
 
 Logo no início temos:
 
@@ -1613,7 +1613,7 @@ impede o envio automático do formulário e permite que o `fetch()` faça a comu
 
 ---
 
-## 12.3 Coletando os dados
+## 16.3 Coletando os dados
 
 O objeto:
 
@@ -1643,7 +1643,7 @@ O resultado será semelhante a:
 
 ---
 
-## 12.4 `fetch()`
+## 16.4 `fetch()`
 
 A comunicação com o backend é realizada por:
 
@@ -1667,7 +1667,7 @@ POST /alunos
 
 ---
 
-## 12.5 `JSON.stringify()`
+## 16.5 `JSON.stringify()`
 
 O objeto JavaScript:
 
@@ -1693,7 +1693,7 @@ informa ao servidor que o corpo da requisição está no formato JSON.
 
 ---
 
-## 12.6 Verificando a resposta
+## 16.6 Verificando a resposta
 
 Depois de enviar os dados:
 
@@ -1722,7 +1722,7 @@ uma mensagem é apresentada e o formulário é limpo.
 
 ---
 
-## 12.7 Tratando erros
+## 16.7 Tratando erros
 
 Quando a API retorna um erro:
 
@@ -1754,7 +1754,7 @@ E-mail inválido.
 
 ---
 
-## 12.8 Tratamento de falhas de conexão
+## 16.8 Tratamento de falhas de conexão
 
 O bloco:
 
@@ -1778,7 +1778,7 @@ Por exemplo:
 
 ---
 
-# 13. Comandos para Executar o Projeto
+# 17. Comandos para Executar o Projeto
 
 Na raiz do projeto, execute:
 
@@ -1820,7 +1820,7 @@ http://127.0.0.1:8000/alunos
 
 ---
 
-# 14. Fluxo Completo do Cadastro
+# 18. Fluxo Completo do Cadastro
 
 O fluxo completo do cadastro de um aluno pode ser representado da seguinte maneira:
 
@@ -1848,7 +1848,7 @@ JavaScript
 Mensagem na tela
 ```
 
-## 14.1 CPF duplicado
+## 18.1 CPF duplicado
 
 Quando o usuário tenta cadastrar um CPF que já existe:
 
@@ -1872,7 +1872,7 @@ HTTP 409
 
 ---
 
-## 14.2 E-mail inválido
+## 18.2 E-mail inválido
 
 Quando o usuário envia um e-mail inválido:
 
@@ -1894,7 +1894,7 @@ JavaScript
 
 ---
 
-# 15. Git e GitHub
+# 19. Git e GitHub
 
 Depois que o projeto estiver funcionando, ele poderá ser versionado utilizando Git.
 
@@ -1938,7 +1938,7 @@ git push -u origin main
 
 ---
 
-## 15.1 Arquivo `.gitignore`
+## 19.1 Arquivo `.gitignore`
 
 Antes de executar:
 
@@ -1984,7 +1984,7 @@ não deve ser publicado, pois pode conter informações sensíveis.
 
 ---
 
-# 16. O que já funciona e o que falta
+# 20. O que já funciona e o que falta
 
 ## Concluído
 
@@ -2014,7 +2014,7 @@ não deve ser publicado, pois pode conter informações sensíveis.
 
 ---
 
-# 17. Atividade de Evolução do Projeto — Separando as Páginas
+# 21. Atividade de Evolução do Projeto — Separando as Páginas
 
 Neste ponto, os alunos deverão realizar uma evolução importante no projeto.
 
@@ -2036,7 +2036,7 @@ A página inicial deverá possuir um link ou botão para acessar essa tela.
 
 ---
 
-## 17.1 Nova estrutura do frontend
+## 21.1 Nova estrutura do frontend
 
 A estrutura deverá ficar semelhante a:
 
@@ -2068,7 +2068,7 @@ cadastrodefuncionario.html
 
 ---
 
-# 18. Criando `cadastrodealuno.html`
+# 22. Criando `cadastrodealuno.html`
 
 A página `cadastrodealuno.html` deverá receber o formulário que atualmente está dentro do `index.html`.
 
@@ -2123,7 +2123,7 @@ Isso é recomendado porque cada página pode possuir suas próprias regras.
 
 ---
 
-# 19. O que deve mudar no `index.html`?
+# 23. O que deve mudar no `index.html`?
 
 Depois de criar:
 
@@ -2163,7 +2163,7 @@ Cadastro de alunos
 
 ---
 
-# 20. O que deve mudar no `main.py`?
+# 24. O que deve mudar no `main.py`?
 
 Como o FastAPI já possui:
 
@@ -2207,7 +2207,7 @@ Essa abordagem também será útil posteriormente para professores e funcionári
 
 ---
 
-# 21. O que deve mudar no JavaScript?
+# 25. O que deve mudar no JavaScript?
 
 O JavaScript que atualmente está em:
 
@@ -2259,7 +2259,7 @@ formulario.addEventListener("submit", async function(evento) {
 
 ---
 
-# 22. Evolução para Professores e Funcionários
+# 26. Evolução para Professores e Funcionários
 
 Depois que o cadastro de alunos estiver separado, os alunos deverão ampliar o sistema.
 
@@ -2297,7 +2297,7 @@ cadastrodefuncionario.html
 
 ---
 
-# 23. Criando o Cadastro de Professores
+# 27. Criando o Cadastro de Professores
 
 Os alunos deverão criar:
 
@@ -2317,7 +2317,7 @@ Será necessário criar também a estrutura correspondente no backend e no banco
 
 ---
 
-## 23.1 Nova tabela `professores`
+## 27.1 Nova tabela `professores`
 
 Uma possibilidade inicial é:
 
@@ -2333,7 +2333,7 @@ CREATE TABLE professores (
 
 ---
 
-## 23.2 Novo schema
+## 27.2 Novo schema
 
 No `schemas.py`, deverá ser criado um modelo para receber os dados:
 
@@ -2358,7 +2358,7 @@ class ProfessorResponse(BaseModel):
 
 ---
 
-## 23.3 Novas rotas no `main.py`
+## 27.3 Novas rotas no `main.py`
 
 Será necessário criar uma rota para consultar professores:
 
@@ -2396,7 +2396,7 @@ Frontend
 
 ---
 
-# 24. Criando o Cadastro de Funcionários
+# 28. Criando o Cadastro de Funcionários
 
 Depois do cadastro de professores, deverá ser criada:
 
@@ -2427,7 +2427,7 @@ CREATE TABLE funcionarios (
 
 ---
 
-## 24.1 Schemas de funcionários
+## 28.1 Schemas de funcionários
 
 No `schemas.py`:
 
@@ -2454,7 +2454,7 @@ class FuncionarioResponse(BaseModel):
 
 ---
 
-## 24.2 Novas rotas
+## 28.2 Novas rotas
 
 No `main.py`:
 
@@ -2474,7 +2474,7 @@ def cadastrar_funcionario(funcionario: FuncionarioCreate):
 
 ---
 
-# 25. Nova Estrutura Geral do Projeto
+# 29. Nova Estrutura Geral do Projeto
 
 Ao final dessa etapa, a estrutura poderá ficar assim:
 
@@ -2504,7 +2504,7 @@ cadastro-alunos/
 
 ---
 
-# 26. Fluxo da Nova Aplicação
+# 30. Fluxo da Nova Aplicação
 
 Depois da evolução, o funcionamento será:
 
@@ -2534,7 +2534,7 @@ Depois da evolução, o funcionamento será:
 
 ---
 
-# 27. Desafio Proposto aos Alunos
+# 31. Desafio Proposto aos Alunos
 
 A partir desta etapa, o exercício será evoluir o projeto existente.
 
@@ -2657,7 +2657,7 @@ Os alunos deverão testar:
 
 ---
 
-# 28. O que muda em cada camada?
+# 32. O que muda em cada camada?
 
 A principal finalidade dessa atividade é fazer com que os alunos percebam que uma alteração no frontend pode exigir alterações em várias partes da aplicação.
 
@@ -2685,7 +2685,7 @@ Banco de Dados
 
 ---
 
-# 29. Próxima Versão
+# 33. Próxima Versão
 
 A próxima etapa será integrar o `GET /alunos` ao frontend e mostrar os registros em uma tabela.
 
