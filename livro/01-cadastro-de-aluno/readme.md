@@ -92,19 +92,19 @@ pip install fastapi uvicorn mysql-connector-python python-dotenv email-validator
 
 ---
 
-## 5. Criar o Banco de Dados `escola`
+## 5. Criar o Banco de Dados `fatec`
 
-O banco de dados utilizado pelo projeto será chamado de `escola`.
+O banco de dados utilizado pelo projeto será chamado de `fatec`.
 
 No MySQL, execute:
 
 ```sql
-CREATE DATABASE escola;
+CREATE DATABASE fatec;
 
-USE escola;
+USE fatec;
 ```
 
-O banco recebeu o nome **`escola`** para permitir que o projeto cresça posteriormente com outras tabelas e funcionalidades relacionadas ao ambiente escolar.
+O banco recebeu o nome **`fatec`** para permitir que o projeto cresça posteriormente com outras tabelas e funcionalidades relacionadas ao ambiente escolar.
 
 Por exemplo, futuramente poderão ser adicionadas tabelas como:
 
@@ -120,29 +120,33 @@ Por exemplo, futuramente poderão ser adicionadas tabelas como:
 
 ## 6. Criar a Tabela `alunos`
 
-Depois de selecionar o banco de dados `escola`, execute:
+Depois de selecionar o banco de dados `fatec`, execute:
 
 ```sql
-CREATE TABLE alunos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    cpf VARCHAR(14) NOT NULL UNIQUE,
-    email VARCHAR(150) NOT NULL,
-    data_nascimento DATE NOT NULL,
-    curso VARCHAR(100) NOT NULL
-);
+CREATE TABLE `alunos` (
+  `codAluno` int(11) NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `cpf` varchar(14) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `data_nascimento` date NOT NULL,
+  `telefone` varchar(20) NOT NULL,
+  `ra` varchar(10) NOT NULL,
+  `cidade` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
 
 ### Estrutura da tabela
 
 | Campo | Tipo | Restrição | Descrição |
 |---|---|---|---|
-| `id` | `INT` | `PRIMARY KEY`, `AUTO_INCREMENT` | Identificador único do aluno. |
+| `codAluno` | `INT` | `PRIMARY KEY`, `AUTO_INCREMENT` | Identificador único do aluno. |
 | `nome` | `VARCHAR(100)` | `NOT NULL` | Nome completo do aluno. |
 | `cpf` | `VARCHAR(14)` | `NOT NULL`, `UNIQUE` | CPF do aluno. |
 | `email` | `VARCHAR(150)` | `NOT NULL` | Endereço de e-mail do aluno. |
 | `data_nascimento` | `DATE` | `NOT NULL` | Data de nascimento do aluno. |
-| `curso` | `VARCHAR(100)` | `NOT NULL` | Curso no qual o aluno está matriculado. |
+| `telefone` | `VARCHAR(20)` | `NOT NULL` | Telefone do aluno. |
+| `ra` | `VARCHAR(10)` | `NOT NULL` | RA do aluno. |
+| `cidade` | `VARCHAR(50)` | `NOT NULL` | Cidade do aluno. |
 
 ### Principais restrições utilizadas
 
@@ -153,7 +157,7 @@ A `PRIMARY KEY` identifica unicamente cada registro da tabela.
 Neste projeto, o campo:
 
 ```sql
-id INT AUTO_INCREMENT PRIMARY KEY
+codAluno INT AUTO_INCREMENT PRIMARY KEY
 ```
 
 será utilizado como identificador único de cada aluno.
@@ -162,7 +166,7 @@ será utilizado como identificador único de cada aluno.
 
 #### `AUTO_INCREMENT`
 
-O `AUTO_INCREMENT` faz com que o MySQL gere automaticamente um novo número para o campo `id`.
+O `AUTO_INCREMENT` faz com que o MySQL gere automaticamente um novo número para o campo `codAluno`.
 
 Por exemplo:
 
@@ -229,7 +233,7 @@ DB_NAME=escola
 | `DB_HOST` | `localhost` | Indica onde o servidor MySQL está sendo executado. |
 | `DB_USER` | `root` | Usuário utilizado para acessar o MySQL. |
 | `DB_PASSWORD` | vazio | Senha do usuário do banco de dados. |
-| `DB_NAME` | `escola` | Nome do banco de dados utilizado pela aplicação. |
+| `DB_NAME` | `fatec` | Nome do banco de dados utilizado pela aplicação. |
 
 Neste ambiente local, utilizando o **XAMPP**, o usuário padrão do MySQL normalmente é `root` e pode estar configurado sem senha.
 
