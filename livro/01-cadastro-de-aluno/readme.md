@@ -133,6 +133,11 @@ CREATE TABLE `alunos` (
   `ra` varchar(10) NOT NULL,
   `cidade` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `alunos`
+  ADD PRIMARY KEY (`codAluno`),
+  ADD UNIQUE KEY `cpf` (`cpf`),
+  ADD UNIQUE KEY `ra` (`ra`);
 ```
 
 ### Estrutura da tabela
@@ -468,7 +473,9 @@ class AlunoCreate(BaseModel):
     cpf: str
     email: EmailStr
     data_nascimento: date
-    curso: str
+    telefone: str
+    ra: str
+    cidade: str
 
 
 class AlunoResponse(BaseModel):
@@ -477,7 +484,9 @@ class AlunoResponse(BaseModel):
     cpf: str
     email: EmailStr
     data_nascimento: date
-    curso: str
+    telefone: str
+    ra: str
+    cidade: str
 ```
 
 ### Importação de `date`
@@ -510,7 +519,9 @@ class AlunoCreate(BaseModel):
     cpf: str
     email: EmailStr
     data_nascimento: date
-    curso: str
+    telefone: str
+    ra: str
+    cidade: str
 ```
 
 O modelo `AlunoCreate` representa os dados necessários para cadastrar um novo aluno.
@@ -523,27 +534,31 @@ A API espera receber informações como:
     "cpf": "123.456.789-00",
     "email": "maria@email.com",
     "data_nascimento": "2005-08-15",
-    "curso": "Desenvolvimento de Sistemas"
+    "telefone": "987654",
+    "ra": "123456",
+    "cidade": "Mococa"
 }
 ```
 
-O campo `id` não aparece nesse modelo porque o ID será gerado automaticamente pelo banco de dados.
+O campo `codAluno` não aparece nesse modelo porque o ID será gerado automaticamente pelo banco de dados.
 
 ### Modelo `AlunoResponse`
 
 ```python
 class AlunoResponse(BaseModel):
-    id: int
+    codAluno: int
     nome: str
     cpf: str
     email: EmailStr
     data_nascimento: date
-    curso: str
+    telefone: str
+    ra: str
+    cidade: str
 ```
 
 O modelo `AlunoResponse` representa os dados que serão devolvidos pela API.
 
-Neste caso, o campo `id` também faz parte da resposta, pois ele já terá sido criado pelo banco de dados.
+Neste caso, o campo `codAluno` também faz parte da resposta, pois ele já terá sido criado pelo banco de dados.
 
 ### Diferença entre `AlunoCreate` e `AlunoResponse`
 
@@ -639,8 +654,8 @@ O arquivo `main.py` é o **núcleo da API**.
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from mysql.connector import IntegrityError
 
 from backend.database import criar_conexao
@@ -649,16 +664,10 @@ from backend.schemas import AlunoCreate, AlunoResponse
 
 app = FastAPI()
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / "frontend"
 
-
-app.mount(
-    "/frontend",
-    StaticFiles(directory=FRONTEND_DIR),
-    name="frontend"
-)
+app.mount("/frontend", StaticFiles(directory=FRONTEND_DIR), name="frontend")
 
 
 @app.get("/", include_in_schema=False)
@@ -669,9 +678,10 @@ def pagina_inicial():
 @app.get("/alunos", response_model=list[AlunoResponse])
 def listar_alunos():
     conexao = criar_conexao()
-    cursor = conexao.cursor()
 
+    cursor = conexao.cursor()
     cursor.execute("SELECT * FROM alunos")
+
     registros = cursor.fetchall()
 
     cursor.close()
@@ -680,14 +690,18 @@ def listar_alunos():
     alunos = []
 
     for registro in registros:
-        alunos.append({
-            "id": registro[0],
+        aluno = {
+            "codAluno": registro[0],
             "nome": registro[1],
             "cpf": registro[2],
             "email": registro[3],
             "data_nascimento": registro[4],
-            "curso": registro[5]
-        })
+            "telefone": registro[5],
+            "ra": registro[6],
+            "cidade": registro[7]
+        }
+
+        alunos.append(aluno)
 
     return alunos
 
@@ -697,31 +711,37 @@ def cadastrar_aluno(aluno: AlunoCreate):
     conexao = criar_conexao()
     cursor = conexao.cursor()
 
-    sql = '''
+    sql = """
         INSERT INTO alunos
-        (nome, cpf, email, data_nascimento, curso)
-        VALUES (%s, %s, %s, %s, %s)
-    '''
+        (nome, cpf, email, data_nascimento, telefone, ra, cidade)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+    """
 
     valores = (
         aluno.nome,
         aluno.cpf,
         aluno.email,
         aluno.data_nascimento,
-        aluno.curso
+        aluno.telefone,
+        aluno.ra,
+        aluno.cidade
     )
 
     try:
         cursor.execute(sql, valores)
         conexao.commit()
 
+        id_aluno = cursor.lastrowid
+
         return {
-            "id": cursor.lastrowid,
+            "id": id_aluno,
             "nome": aluno.nome,
             "cpf": aluno.cpf,
             "email": aluno.email,
             "data_nascimento": aluno.data_nascimento,
-            "curso": aluno.curso
+            "telefone": aluno.telefone,
+            "ra": aluno.ra,
+            "cidade": aluno.cidade
         }
 
     except IntegrityError as erro:
@@ -903,25 +923,29 @@ Os dados recuperados do MySQL são organizados em uma lista de dicionários:
 alunos = []
 
 for registro in registros:
-    alunos.append({
-        "id": registro[0],
-        "nome": registro[1],
-        "cpf": registro[2],
-        "email": registro[3],
-        "data_nascimento": registro[4],
-        "curso": registro[5]
-    })
+        aluno = {
+            "codAluno": registro[0],
+            "nome": registro[1],
+            "cpf": registro[2],
+            "email": registro[3],
+            "data_nascimento": registro[4],
+            "telefone": registro[5],
+            "ra": registro[6],
+            "cidade": registro[7]
+        }
 ```
 
 A posição de cada valor corresponde à ordem das colunas na tabela:
 
 ```text
-registro[0] → id
+registro[0] → codAluno
 registro[1] → nome
 registro[2] → cpf
 registro[3] → email
 registro[4] → data_nascimento
-registro[5] → curso
+registro[5] → telefone
+registro[5] → ra
+registro[5] → cidade
 ```
 
 O resultado será semelhante a:
@@ -929,12 +953,14 @@ O resultado será semelhante a:
 ```json
 [
     {
-        "id": 1,
+        "codAluno": 1,
         "nome": "Maria Silva",
         "cpf": "123.456.789-00",
         "email": "maria@email.com",
         "data_nascimento": "2005-08-15",
-        "curso": "Desenvolvimento de Sistemas"
+        "telefone": "987654",
+        "ra": "123456",
+        "cidade": "Mococa"
     }
 ]
 ```
@@ -970,23 +996,25 @@ Isso significa que os dados recebidos serão validados de acordo com o modelo `A
 O comando SQL utilizado para cadastrar o aluno é:
 
 ```python
-sql = '''
-    INSERT INTO alunos
-    (nome, cpf, email, data_nascimento, curso)
-    VALUES (%s, %s, %s, %s, %s)
-'''
+sql = """
+        INSERT INTO alunos
+        (nome, cpf, email, data_nascimento, telefone, ra, cidade)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+    """
 ```
 
 Os valores são enviados separadamente:
 
 ```python
 valores = (
-    aluno.nome,
-    aluno.cpf,
-    aluno.email,
-    aluno.data_nascimento,
-    aluno.curso
-)
+        aluno.nome,
+        aluno.cpf,
+        aluno.email,
+        aluno.data_nascimento,
+        aluno.telefone,
+        aluno.ra,
+        aluno.cidade
+    )
 ```
 
 E então executados:
@@ -1020,7 +1048,7 @@ permite recuperar o ID gerado automaticamente pelo MySQL.
 Por exemplo, se o banco criou:
 
 ```text
-id = 15
+codAluno = 15
 ```
 
 então:
@@ -1351,9 +1379,22 @@ Nesta primeira versão, ele contém o formulário de cadastro de alunos.
 ### Código inicial
 
 ```html
-<h1>Cadastro de Alunos</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
 
-<form id="form-aluno">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastro de Alunos</title>
+</head>
+
+<body>
+
+    <h1>Cadastro de Alunos</h1>
+
+    <form id="form-aluno">
+
     <div>
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
@@ -1375,16 +1416,29 @@ Nesta primeira versão, ele contém o formulário de cadastro de alunos.
     </div>
 
     <div>
-        <label for="curso">Curso:</label>
-        <input type="text" id="curso" name="curso" required>
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" name="telefone" required>
+    </div>
+
+    <div>
+        <label for="ra">RA:</label>
+        <input type="text" id="ra" name="ra" required>
+    </div>
+
+    <div>
+        <label for="cidade">Cidade:</label>
+        <input type="text" id="cidade" name="cidade" required>
     </div>
 
     <button type="submit">Cadastrar</button>
+
 </form>
 
-<div id="mensagem" aria-live="polite"></div>
+<div id="mensagem"></div>
+    <script src="/frontend/js/app.js"></script>
+</body>
 
-<script src="/frontend/js/app.js"></script>
+</html>
 ```
 
 ### Estrutura do formulário
@@ -1514,10 +1568,13 @@ formulario.addEventListener("submit", async function(evento) {
         cpf: document.getElementById("cpf").value,
         email: document.getElementById("email").value,
         data_nascimento: document.getElementById("data_nascimento").value,
-        curso: document.getElementById("curso").value
+        telefone: document.getElementById("telefone").value,
+        ra: document.getElementById("ra").value,
+        cidade: document.getElementById("cidade").value
     };
 
     try {
+
         const resposta = await fetch("/alunos", {
             method: "POST",
             headers: {
@@ -1529,19 +1586,23 @@ formulario.addEventListener("submit", async function(evento) {
         const resultado = await resposta.json();
 
         if (resposta.ok) {
+
             mensagem.textContent = "Aluno cadastrado com sucesso!";
+
             formulario.reset();
+
             console.log("Aluno cadastrado:", resultado);
+
         } else {
-            mensagem.textContent =
-                "Erro ao cadastrar aluno: " + obterMensagemErro(resultado);
+
+            mensagem.textContent = "Erro ao cadastrar aluno: " + obterMensagemErro(resultado);
 
             console.error("Erro da API:", resultado);
         }
 
     } catch (erro) {
-        mensagem.textContent =
-            "Não foi possível conectar ao servidor.";
+
+        mensagem.textContent = "Não foi possível conectar ao servidor.";
 
         console.error("Erro de conexão:", erro);
     }
@@ -1549,20 +1610,45 @@ formulario.addEventListener("submit", async function(evento) {
 
 
 function obterMensagemErro(resultado) {
+
     if (!resultado.detail) {
         return "Dados inválidos.";
     }
 
     if (Array.isArray(resultado.detail)) {
+
         return resultado.detail
             .map(erro => {
+
                 const campo = erro.loc?.[1];
 
-                if (campo === "email") return "E-mail inválido.";
-                if (campo === "nome") return "Nome inválido.";
-                if (campo === "cpf") return "CPF inválido.";
-                if (campo === "data_nascimento") return "Data de nascimento inválida.";
-                if (campo === "curso") return "Curso inválido.";
+                if (campo === "email") {
+                    return "E-mail inválido.";
+                }
+
+                if (campo === "nome") {
+                    return "Nome inválido.";
+                }
+
+                if (campo === "cpf") {
+                    return "CPF inválido.";
+                }
+
+                if (campo === "data_nascimento") {
+                    return "Data de nascimento inválida.";
+                }
+                
+                if (campo === "telefone") {
+                    return "Telefone inválido.";
+                }
+
+                if (campo === "ra") {
+                    return "RA inválido.";
+                }
+
+                if (campo === "cidade") {
+                    return "Cidade inválida.";
+                }
 
                 return erro.msg;
             })
@@ -1622,13 +1708,15 @@ impede o envio automático do formulário e permite que o `fetch()` faça a comu
 O objeto:
 
 ```javascript
-const aluno = {
-    nome: document.getElementById("nome").value,
-    cpf: document.getElementById("cpf").value,
-    email: document.getElementById("email").value,
-    data_nascimento: document.getElementById("data_nascimento").value,
-    curso: document.getElementById("curso").value
-};
+ const aluno = {
+        nome: document.getElementById("nome").value,
+        cpf: document.getElementById("cpf").value,
+        email: document.getElementById("email").value,
+        data_nascimento: document.getElementById("data_nascimento").value,
+        telefone: document.getElementById("telefone").value,
+        ra: document.getElementById("ra").value,
+        cidade: document.getElementById("cidade").value
+    };
 ```
 
 coleta os valores preenchidos pelo usuário.
@@ -1641,7 +1729,9 @@ O resultado será semelhante a:
     "cpf": "123.456.789-00",
     "email": "maria@email.com",
     "data_nascimento": "2005-08-15",
-    "curso": "Desenvolvimento de Sistemas"
+    "telefone": "987654",
+    "ra": "12456",
+    "cidade": "Mococa"
 }
 ```
 
@@ -2079,9 +2169,10 @@ A página `cadastrodealuno.html` deverá receber o formulário que atualmente es
 Um exemplo inicial:
 
 ```html
-<h1>Cadastro de Alunos</h1>
+ <h1>Cadastro de Alunos</h1>
 
-<form id="form-aluno">
+    <form id="form-aluno">
+
     <div>
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
@@ -2103,11 +2194,22 @@ Um exemplo inicial:
     </div>
 
     <div>
-        <label for="curso">Curso:</label>
-        <input type="text" id="curso" name="curso" required>
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" name="telefone" required>
+    </div>
+
+    <div>
+        <label for="ra">RA:</label>
+        <input type="text" id="ra" name="ra" required>
+    </div>
+
+    <div>
+        <label for="cidade">Cidade:</label>
+        <input type="text" id="cidade" name="cidade" required>
     </div>
 
     <button type="submit">Cadastrar</button>
+
 </form>
 
 <div id="mensagem" aria-live="polite"></div>
@@ -2249,12 +2351,14 @@ const mensagem = document.getElementById("mensagem");
 formulario.addEventListener("submit", async function(evento) {
     evento.preventDefault();
 
-    const aluno = {
+     const aluno = {
         nome: document.getElementById("nome").value,
         cpf: document.getElementById("cpf").value,
         email: document.getElementById("email").value,
         data_nascimento: document.getElementById("data_nascimento").value,
-        curso: document.getElementById("curso").value
+        telefone: document.getElementById("telefone").value,
+        ra: document.getElementById("ra").value,
+        cidade: document.getElementById("cidade").value
     };
 
     // Comunicação com a API...
@@ -2326,13 +2430,19 @@ Será necessário criar também a estrutura correspondente no backend e no banco
 Uma possibilidade inicial é:
 
 ```sql
-CREATE TABLE professores (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    cpf VARCHAR(14) NOT NULL UNIQUE,
-    email VARCHAR(150) NOT NULL,
-    especialidade VARCHAR(100) NOT NULL
-);
+CREATE TABLE `professor` (
+  `codProf` int(11) NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `cpf` varchar(14) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `data_nascimento` date NOT NULL,
+  `telefone` varchar(20) NOT NULL,
+  `cidade` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `professor`
+  ADD PRIMARY KEY (`codProf`),
+  ADD UNIQUE KEY `cpf` (`cpf`);
 ```
 
 ---
@@ -2342,11 +2452,13 @@ CREATE TABLE professores (
 No `schemas.py`, deverá ser criado um modelo para receber os dados:
 
 ```python
-class ProfessorCreate(BaseModel):
+Class ProfessorCreate(BaseModel):
     nome: str
     cpf: str
     email: EmailStr
-    especialidade: str
+    data_nascimento: date
+    telefone: str
+    cidade: str
 ```
 
 E outro para representar a resposta:
@@ -2357,7 +2469,9 @@ class ProfessorResponse(BaseModel):
     nome: str
     cpf: str
     email: EmailStr
-    especialidade: str
+    data_nascimento: date
+    telefone: str
+    cidade: str
 ```
 
 ---
@@ -2419,14 +2533,19 @@ Também será necessário criar a tabela correspondente no MySQL.
 Uma possibilidade inicial:
 
 ```sql
-CREATE TABLE funcionarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    cpf VARCHAR(14) NOT NULL UNIQUE,
-    email VARCHAR(150) NOT NULL,
-    cargo VARCHAR(100) NOT NULL,
-    setor VARCHAR(100) NOT NULL
-);
+CREATE TABLE `funcionario` (
+  `codFunc` int(11) NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `cpf` varchar(14) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `data_nascimento` date NOT NULL,
+  `telefone` varchar(20) NOT NULL,
+  `cidade` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `funcionario`
+  ADD PRIMARY KEY (`codFunc`),
+  ADD UNIQUE KEY `cpf` (`cpf`);
 ```
 
 ---
@@ -2440,8 +2559,9 @@ class FuncionarioCreate(BaseModel):
     nome: str
     cpf: str
     email: EmailStr
-    cargo: str
-    setor: str
+    data_nascimento: date
+    telefone: str
+    cidade: str
 ```
 
 E:
@@ -2452,8 +2572,9 @@ class FuncionarioResponse(BaseModel):
     nome: str
     cpf: str
     email: EmailStr
-    cargo: str
-    setor: str
+    data_nascimento: date
+    telefone: str
+    cidade: str
 ```
 
 ---
