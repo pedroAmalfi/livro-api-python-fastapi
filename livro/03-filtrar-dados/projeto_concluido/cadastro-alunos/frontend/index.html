@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sistema de Gestão Escolar</title>
+
+
+    <!-- =====================================================
+         BOOTSTRAP
+    ====================================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         CSS DO PROJETO
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="/frontend/css/estilo.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         MENU SUPERIOR
+    ====================================================== -->
+
+    <nav class="navbar navbar-dark bg-primary shadow">
+
+        <div class="container">
+
+            <a
+                class="navbar-brand fw-bold"
+                href="/"
+            >
+                🎓 Sistema de Gestão Escolar
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         CONTEÚDO PRINCIPAL
+    ====================================================== -->
+
+    <main class="container py-5">
+
+
+        <!-- =================================================
+             CABEÇALHO
+        ================================================== -->
+
+        <div class="text-center mb-5">
+
+            <h1 class="display-5 fw-bold">
+                Gestão Escolar
+            </h1>
+
+            <p class="lead text-muted">
+                Gerencie alunos, professores e funcionários
+                de forma simples e organizada.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             CARDS
+        ================================================== -->
+
+        <div class="row g-4">
+
+
+            <!-- =============================================
+                 ALUNOS
+            ============================================== -->
+
+            <div class="col-md-4">
+
+                <div class="card h-100 shadow-sm border-0">
+
+                    <div class="card-body text-center p-4">
+
+                        <div class="display-4 mb-3">
+                            👨‍🎓
+                        </div>
+
+                        <h2 class="h4 fw-bold">
+                            Alunos
+                        </h2>
+
+                        <p class="text-muted">
+                            Consulte os alunos cadastrados
+                            ou realize um novo cadastro.
+                        </p>
+
+
+                        <div class="d-grid gap-2 mt-4">
+
+                            <a
+                                href="/frontend/alunos.html"
+                                class="btn btn-primary"
+                            >
+                                Ver alunos
+                            </a>
+
+                            <a
+                                href="/frontend/cadastrodealuno.html"
+                                class="btn btn-outline-primary"
+                            >
+                                Cadastrar aluno
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 PROFESSORES
+            ============================================== -->
+
+            <div class="col-md-4">
+
+                <div class="card h-100 shadow-sm border-0">
+
+                    <div class="card-body text-center p-4">
+
+                        <div class="display-4 mb-3">
+                            👨‍🏫
+                        </div>
+
+                        <h2 class="h4 fw-bold">
+                            Professores
+                        </h2>
+
+                        <p class="text-muted">
+                            Consulte os professores cadastrados
+                            ou realize um novo cadastro.
+                        </p>
+
+
+                        <div class="d-grid gap-2 mt-4">
+
+                            <a
+                                href="/frontend/professores.html"
+                                class="btn btn-primary"
+                            >
+                                Ver professores
+                            </a>
+
+                            <a
+                                href="/frontend/cadastrodeprofessor.html"
+                                class="btn btn-outline-primary"
+                            >
+                                Cadastrar professor
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 FUNCIONÁRIOS
+            ============================================== -->
+
+            <div class="col-md-4">
+
+                <div class="card h-100 shadow-sm border-0">
+
+                    <div class="card-body text-center p-4">
+
+                        <div class="display-4 mb-3">
+                            👔
+                        </div>
+
+                        <h2 class="h4 fw-bold">
+                            Funcionários
+                        </h2>
+
+                        <p class="text-muted">
+                            Consulte os funcionários cadastrados
+                            ou realize um novo cadastro.
+                        </p>
+
+
+                        <div class="d-grid gap-2 mt-4">
+
+                            <a
+                                href="/frontend/funcionarios.html"
+                                class="btn btn-primary"
+                            >
+                                Ver funcionários
+                            </a>
+
+                            <a
+                                href="/frontend/cadastrodefuncionario.html"
+                                class="btn btn-outline-primary"
+                            >
+                                Cadastrar funcionário
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MENSAGEM
+        ================================================== -->
+
+        <div
+            id="mensagem"
+            class="mt-4 text-center"
+        ></div>
+
+
+    </main>
+
+
+    <!-- =====================================================
+         RODAPÉ
+    ====================================================== -->
+
+    <footer class="text-center text-muted py-4">
+
+        <small>
+            Sistema de Gestão Escolar
+        </small>
+
+    </footer>
+
+
+    <!-- =====================================================
+         BOOTSTRAP JAVASCRIPT
+    ====================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+
+    <!-- =====================================================
+         JAVASCRIPT DO PROJETO
+    ====================================================== -->
+
+    <script src="/frontend/js/app.js"></script>
+
+
+</body>
+
+</html>
