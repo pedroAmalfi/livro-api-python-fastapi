@@ -852,4 +852,4 @@ Aluno Prof. Func.        Aluno Prof. Func.
 
 No próximo capítulo vamos criar a aplicação e realizar o Filtrar Dados dos Alunos junto com o banco de dados.
 
-[➡️ **Capítulo 02 — Filtrar Dados dos Alunos**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/03-filtrar-dados)
+[➡️ **Capítulo 03 — Filtrar Dados dos Alunos**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/03-filtrar-dados)
