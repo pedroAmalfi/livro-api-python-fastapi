@@ -1,4 +1,4 @@
-# Sistema Escolar com FastAPI -- Visualização de Alunos
+# Capítulo 02 - Sistema Escolar com FastAPI -- Visualização de Alunos
 
 ## Objetivo
 
