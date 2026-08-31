@@ -3352,3 +3352,522 @@ Com isso, o sistema passará a permitir:
 ```
 
 Esse processo permitirá que o projeto deixe de ser apenas um cadastro simples e evolua para um verdadeiro **Sistema de Gestão Escolar**, integrando frontend, JavaScript, API REST, FastAPI e banco de dados MySQL.
+
+
+# 55. Código Completo das Páginas do Aluno, Professor e Funcionário após aplicar o Bootstrap:
+
+Abaixo pode ser visto as páginas completas com as classes responsáveis  pelos estilos CSS com Bootstrap:
+
+Alunos.html
+```html
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Alunos Cadastrados</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Nosso CSS -->
+    <link
+        rel="stylesheet"
+        href="/frontend/css/estilo.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- ======================================================
+         MENU
+    ======================================================= -->
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="/">
+                Gestão Escolar
+            </a>
+
+            <div>
+
+                <a
+                    href="/"
+                    class="btn btn-light btn-sm"
+                >
+                    Início
+                </a>
+
+                <a
+                    href="/frontend/cadastrodealuno.html"
+                    class="btn btn-light btn-sm"
+                >
+                    Novo aluno
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ======================================================
+         CONTEÚDO
+    ======================================================= -->
+
+    <main class="container py-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h1 class="fw-bold mb-1">
+                    Alunos Cadastrados
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Consulte e filtre os alunos cadastrados.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             FILTRO
+        =================================================== -->
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body">
+
+                <h5 class="card-title fw-bold mb-3">
+                    🔎 Filtrar alunos
+                </h5>
+
+
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-3">
+
+                        <label
+                            for="campoFiltro"
+                            class="form-label"
+                        >
+                            Filtrar por
+                        </label>
+
+                        <select
+                            id="campoFiltro"
+                            class="form-select"
+                        >
+
+                            <option value="codAluno">
+                                Código
+                            </option>
+
+                            <option value="nome">
+                                Nome
+                            </option>
+
+                            <option value="cpf">
+                                CPF
+                            </option>
+
+                            <option value="email">
+                                E-mail
+                            </option>
+
+                            <option value="data_nascimento">
+                                Data de nascimento
+                            </option>
+
+                            <option value="telefone">
+                                Telefone
+                            </option>
+
+                            <option value="cidade">
+                                Cidade
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-7">
+
+                        <label
+                            for="textoFiltro"
+                            class="form-label"
+                        >
+                            Pesquisar
+                        </label>
+
+                        <input
+                            type="text"
+                            id="textoFiltro"
+                            class="form-control"
+                            placeholder="Digite o que deseja pesquisar..."
+                        >
+
+                    </div>
+
+
+                    <div class="col-md-2">
+
+                        <button
+                            type="button"
+                            id="btnLimparFiltro"
+                            class="btn btn-secondary w-100"
+                        >
+                            Limpar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             TABELA
+        =================================================== -->
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover table-striped align-middle">
+
+                        <thead class="table-primary">
+
+                            <tr>
+
+                                <th>Código</th>
+
+                                <th>Nome</th>
+
+                                <th>CPF</th>
+
+                                <th>E-mail</th>
+
+                                <th>Data de Nascimento</th>
+
+                                <th>Telefone</th>
+
+                                <th>RA</th>
+
+                                <th>Cidade</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="listaAlunos">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- Bootstrap JS -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <!-- JavaScript do projeto -->
+    <script src="/frontend/js/aluno.js"></script>
+
+</body>
+
+</html>
+```
+
+Professores.html:
+
+```html
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Professores Cadastrados</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/frontend/css/estilo.css"
+    >
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark bg-primary shadow">
+
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="/">
+                Gestão Escolar
+            </a>
+
+            <div>
+
+                <a
+                    href="/"
+                    class="btn btn-light btn-sm"
+                >
+                    Início
+                </a>
+
+                <a
+                    href="/frontend/cadastrodeprofessor.html"
+                    class="btn btn-light btn-sm"
+                >
+                    Novo professor
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <main class="container py-5">
+
+        <div class="mb-4">
+
+            <h1 class="fw-bold">
+                Professores Cadastrados
+            </h1>
+
+            <p class="text-muted">
+                Consulte os professores cadastrados no sistema.
+            </p>
+
+        </div>
+
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover table-striped align-middle">
+
+                        <thead class="table-primary">
+
+                            <tr>
+
+                                <th>Código</th>
+
+                                <th>Nome</th>
+
+                                <th>CPF</th>
+
+                                <th>E-mail</th>
+
+                                <th>Data de Nascimento</th>
+
+                                <th>Telefone</th>
+
+                                <th>Cidade</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="listaProfessores">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <script src="/frontend/js/professor.js"></script>
+
+</body>
+
+</html>
+```
+
+Funcionarios.html:
+
+```html
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Funcionários Cadastrados</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/frontend/css/estilo.css"
+    >
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark bg-primary shadow">
+
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="/">
+                Gestão Escolar
+            </a>
+
+            <div>
+
+                <a
+                    href="/"
+                    class="btn btn-light btn-sm"
+                >
+                    Início
+                </a>
+
+                <a
+                    href="/frontend/cadastrodefuncionario.html"
+                    class="btn btn-light btn-sm"
+                >
+                    Novo funcionário
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <main class="container py-5">
+
+        <div class="mb-4">
+
+            <h1 class="fw-bold">
+                Funcionários Cadastrados
+            </h1>
+
+            <p class="text-muted">
+                Consulte os funcionários cadastrados no sistema.
+            </p>
+
+        </div>
+
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover table-striped align-middle">
+
+                        <thead class="table-primary">
+
+                            <tr>
+
+                                <th>Código</th>
+
+                                <th>Nome</th>
+
+                                <th>CPF</th>
+
+                                <th>E-mail</th>
+
+                                <th>Data de Nascimento</th>
+
+                                <th>Telefone</th>
+
+                                <th>Cidade</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="listaFuncionarios">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <script src="/frontend/js/funcionario.js"></script>
+
+</body>
+
+</html>
+```
