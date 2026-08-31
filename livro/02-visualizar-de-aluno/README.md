@@ -845,3 +845,11 @@ Aluno Prof. Func.        Aluno Prof. Func.
 > O objetivo é que eles compreendam o padrão utilizado e consigam
 > reproduzi-lo para as demais entidades, em vez de simplesmente copiar o
 > resultado final.
+
+
+
+# 22. Próximo capítulo
+
+No próximo capítulo vamos criar a aplicação e realizar o Filtrar Dados dos Alunos junto com o banco de dados.
+
+[➡️ **Capítulo 02 — Filtrar Dados dos Alunos**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/03-filtrar-dados)
