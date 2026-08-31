@@ -1,4 +1,4 @@
-# Capítulo 3 — Filtrando os Dados e Melhorando a Interface
+# Capítulo 03 — Filtrando os Dados e Melhorando a Interface
 
 > **Projeto:** Sistema de Gestão Escolar com FastAPI, MySQL, HTML, JavaScript e Bootstrap  
 > **Objetivo:** evoluir o projeto criado nos capítulos anteriores, permitindo consultar registros com filtros e deixando as páginas mais organizadas e agradáveis de utilizar.
