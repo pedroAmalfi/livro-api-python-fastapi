@@ -2824,3 +2824,10 @@ Em seguida, serão implementadas as operações:
 Posteriormente, o projeto poderá evoluir para um pequeno **Sistema de Gestão Escolar**, com diferentes módulos e relacionamentos entre as entidades.
 
 A documentação apresentada neste capítulo é temporária. Quando a aplicação estiver mais madura, o conteúdo deverá ser revisado, reorganizado e transformado em uma versão definitiva do capítulo do livro.
+
+
+# 34. Próximo capítulo
+
+No próximo capítulo vamos criar a aplicação e realizar o visualizar dos alunos junto com o banco de dados.
+
+[➡️ **Capítulo 02 — Visualizar de Aluno**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/02-visualizar-de-aluno)
