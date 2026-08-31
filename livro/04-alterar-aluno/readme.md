@@ -1052,3 +1052,11 @@ MySQL
 ```
 
 **Boa prática: não tenha pressa para copiar. Entenda o que cada linha faz e por que ela precisa existir.**
+
+
+
+# 28. Próximo capítulo
+
+No próximo capítulo vamos criar a aplicação e realizar o Excluir Alunos junto com o banco de dados.
+
+[➡️ **Capítulo 05 — Excluir Alunos**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/05-excluir-aluno)
