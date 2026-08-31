@@ -1,4 +1,4 @@
-# Capítulo Temporário — Cadastro de Alunos do Projeto Escola
+# Capítulo 01 — Cadastro de Alunos do Projeto Escola
 
 > **Versão técnica complementar — comandos, arquivos e explicações**
 
