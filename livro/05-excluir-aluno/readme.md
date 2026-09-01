@@ -1,4 +1,4 @@
-**\# Capítulo 05 - Excluir Alunos**
+**Capítulo 05 - Excluir Alunos**
 
 Este capítulo é um desafio aos leitores para que tentem desenvolver a
 funcionalidade do Excluir semelhante ao realizado no Alterar do capítulo
