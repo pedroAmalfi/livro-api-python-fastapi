@@ -510,8 +510,8 @@ DELETE /alunos/{codAluno}
 
 <summary>
 
-`<strong>`👉 Clique aqui para revelar a solução do
-Backend`</strong>`
+<strong>👉 Clique aqui para revelar a solução do
+Backend</strong>
 
 </summary>
 
@@ -661,8 +661,8 @@ envia uma resposta para o JavaScript.
 
 <summary>
 
-`<strong>`👉 Clique aqui para revelar a solução do
-JavaScript`</strong>`
+<strong>👉 Clique aqui para revelar a solução do
+JavaScript</strong>
 
 </summary>
 
@@ -822,7 +822,7 @@ Dessa forma a tabela é atualizada.
 
 
 </details>
-```
+
 
 ------------------------------------------------------------------------
 
