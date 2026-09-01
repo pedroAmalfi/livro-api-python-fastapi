@@ -353,7 +353,7 @@ Essa coluna permitirá que o usuário escolha qual aluno deseja alterar.
 
 ### Ajustar o `colspan`
 
-Se existir:
+Se existir (No Aluno.js):
 
 ```html
 <td colspan="8">
@@ -488,7 +488,7 @@ Os `id` permitirão que o JavaScript altere esses textos quando estivermos no mo
 
 ## 15. Etapa 6 — Ler o `codAluno` da URL
 
-No JavaScript:
+No JavaScript, adicionar as linhas abaixo no começo do arquivo:
 
 ```javascript
 const parametros =
