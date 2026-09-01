@@ -504,15 +504,15 @@ DELETE /alunos/{codAluno}
 > A solução abaixo apresenta uma implementação possível para o Excluir
 > de Aluno.
 
-```{=html}
+
 <details>
 ```
-```{=html}
+
 <summary>
 ```
 `<strong>`{=html}👉 Clique aqui para revelar a solução do
 Backend`</strong>`{=html}
-```{=html}
+
 </summary>
 ```
 ## Backend --- `backend/main.py`
@@ -649,21 +649,21 @@ return {
 
 envia uma resposta para o JavaScript.
 
-```{=html}
+
 </details>
 ```
 
 ------------------------------------------------------------------------
 
-```{=html}
+
 <details>
 ```
-```{=html}
+
 <summary>
 ```
 `<strong>`{=html}👉 Clique aqui para revelar a solução do
 JavaScript`</strong>`{=html}
-```{=html}
+
 </summary>
 ```
 ## Frontend --- `frontend/js/aluno.js`
@@ -820,7 +820,7 @@ carregarAlunos();
 
 Dessa forma a tabela é atualizada.
 
-```{=html}
+
 </details>
 ```
 
