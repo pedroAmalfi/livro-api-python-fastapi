@@ -506,15 +506,15 @@ DELETE /alunos/{codAluno}
 
 
 <details>
-```
+
 
 <summary>
-```
+
 `<strong>`👉 Clique aqui para revelar a solução do
 Backend`</strong>`
 
 </summary>
-```
+
 ## Backend --- `backend/main.py`
 
 Depois da função `alterar_aluno()`, adicione:
@@ -651,21 +651,21 @@ envia uma resposta para o JavaScript.
 
 
 </details>
-```
+
 
 ------------------------------------------------------------------------
 
 
 <details>
-```
+
 
 <summary>
-```
+
 `<strong>`👉 Clique aqui para revelar a solução do
 JavaScript`</strong>`
 
 </summary>
-```
+
 ## Frontend --- `frontend/js/aluno.js`
 
 Na função `exibirAlunos()`, mantenha o botão Alterar e acrescente o
