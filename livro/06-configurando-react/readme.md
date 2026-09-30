@@ -1661,8 +1661,3 @@ Assim começaremos a construir, de forma prática, uma aplicação completa
 com:
 
 **Front-end + API + Banco de Dados.**
-
-------------------------------------------------------------------------
-
-**Material didático --- FATEC / Técnicas Avançadas de Programação Web e
-Mobile**
