@@ -42,16 +42,14 @@ Seu objetivo é:
 Se você tentou e ainda não conseguiu, clique para revelar a solução. Não
 vale espiar antes de tentar! 😄
 
-```{=html}
 <details>
-```
-```{=html}
+
 <summary>
-```
+
 👉 Clique aqui para revelar a solução
-```{=html}
+
 </summary>
-```
+
 ### Passo 1 --- Confira a rota de exclusão no FastAPI
 
 Abra <http://127.0.0.1:8000/docs> e localize a rota de exclusão de
@@ -239,9 +237,9 @@ Se ocorrer um erro, confira a rota `DELETE` em `/docs`, o terminal do
 FastAPI e o Console do navegador. Verifique também se o endpoint retorna
 JSON ou uma resposta sem corpo, como HTTP 204.
 
-```{=html}
+
 </details>
-```
+
 
 ------------------------------------------------------------------------
 
