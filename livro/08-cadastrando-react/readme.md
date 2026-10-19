@@ -666,4 +666,4 @@ exercício.
 
 No próximo capítulo vamos filtrar dados do projeto em REACT.
 
-[➡️ **Capítulo 08 — Filtrando dados do Projeto em React**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/09-filtrando-dados-react)
+[➡️ **Capítulo 09 — Filtrando dados do Projeto em React**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/09-filtrando-dados-react)
