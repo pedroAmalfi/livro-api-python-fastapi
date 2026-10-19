@@ -303,3 +303,12 @@ professores e funcionários.
 **Resultado esperado:** o sistema permitirá consultar, filtrar,
 cadastrar, alterar e excluir alunos. Você deverá aplicar a mesma
 funcionalidade a professores e funcionários para concluir a atividade.
+
+
+
+# Próximo capítulo
+
+No próximo capítulo vamos Finalizar nosso projeto em REACT.
+
+[➡️ **Capítulo 11 — Finalizando o Projeto em React**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/12-final)
+
