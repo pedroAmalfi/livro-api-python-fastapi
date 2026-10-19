@@ -660,3 +660,10 @@ backend.
 de consulta e cadastro. O cadastro de alunos estará funcional, e os
 cadastros de professores e funcionários serão desenvolvidos como
 exercício.
+
+
+# Próximo capítulo
+
+No próximo capítulo vamos filtrar dados do projeto em REACT.
+
+[➡️ **Capítulo 08 — Filtrando dados do Projeto em React**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/09-filtrando-dados-react)
