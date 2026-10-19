@@ -451,3 +451,10 @@ verificar.
 **Resultado esperado:** o módulo de alunos permitirá consultar, filtrar,
 cadastrar e alterar registros. Professores e funcionários deverão
 receber a mesma funcionalidade como exercício.
+
+
+# Próximo capítulo
+
+No próximo capítulo vamos excluir dados do projeto em REACT.
+
+[➡️ **Capítulo 11 — Excluindo dados do Projeto em React**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/11-excluir-react)
