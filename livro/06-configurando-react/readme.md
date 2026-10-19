@@ -1661,3 +1661,10 @@ Assim começaremos a construir, de forma prática, uma aplicação completa
 com:
 
 **Front-end + API + Banco de Dados.**
+
+
+# Próximo capítulo
+
+No próximo capítulo vamos criar a aplicação e realizar a criação do projeto em REACT.
+
+[➡️ **Capítulo 07 — Criando o Projeto em React**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/07-criando-projeto-react)
