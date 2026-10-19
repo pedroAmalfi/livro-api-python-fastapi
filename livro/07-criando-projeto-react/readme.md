@@ -704,3 +704,10 @@ Uma aplicação React independente do frontend antigo do FastAPI, com uma
 página inicial organizada e três módulos. A listagem de alunos estará
 funcional, enquanto professores e funcionários serão implementados pelos
 estudantes como exercício.
+
+
+# Próximo capítulo
+
+No próximo capítulo vamos Realizar o Cadastro do projeto em REACT.
+
+[➡️ **Capítulo 08 — Cadastro do Projeto em React**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/08-cadastrando-react)
