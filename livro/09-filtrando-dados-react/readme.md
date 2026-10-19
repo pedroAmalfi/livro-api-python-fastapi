@@ -352,4 +352,4 @@ aplicar o mesmo padrão às páginas de professores e funcionários.
 
 No próximo capítulo vamos alterar dados do projeto em REACT.
 
-[➡️ **Capítulo 10 — ALterando dados do Projeto em React**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/10-alterando-react)
+[➡️ **Capítulo 10 — Alterando dados do Projeto em React**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/10-alterando-react)
