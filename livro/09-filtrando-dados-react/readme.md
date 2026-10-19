@@ -346,3 +346,10 @@ alunos.
 **Resultado esperado:** a tela de alunos terá filtros funcionais
 semelhantes aos da versão anterior do sistema. Os estudantes deverão
 aplicar o mesmo padrão às páginas de professores e funcionários.
+
+
+# Próximo capítulo
+
+No próximo capítulo vamos alterar dados do projeto em REACT.
+
+[➡️ **Capítulo 10 — ALterando dados do Projeto em React**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/10-alterando-react)
