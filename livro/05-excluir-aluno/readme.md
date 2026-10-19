@@ -1061,6 +1061,6 @@ Funcionário**.
 
 # Próximo capítulo
 
-No próximo capítulo vamos criar a aplicação e realizar o Excluir Alunos junto com o banco de dados.
+No próximo capítulo vamos criar a aplicação e realizar a Configuração do ambiente em REACT.
 
 [➡️ **Capítulo 06 — Configurando o React**](https://github.com/pedroAmalfi/livro-api-python-fastapi/tree/main/livro/06-configurando-react)
